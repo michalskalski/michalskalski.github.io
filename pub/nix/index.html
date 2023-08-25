@@ -7,9 +7,9 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="/Users/mskalski/.config/emacs/.local/straight/build-28.2/revealjs/dist/reveal.css"/>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
 
-<link rel="stylesheet" href="/Users/mskalski/.config/emacs/.local/straight/build-28.2/revealjs/dist/theme/white.css" id="theme"/>
+<link rel="stylesheet" href="./reveal.js/dist/theme/white.css" id="theme"/>
 </head>
 <body>
 <div class="reveal">
@@ -19,8 +19,8 @@
 </section>
 
 <section>
-<section id="slide-org32a3ef5" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h2 id="org32a3ef5">What is nix?</h2>
+<section id="slide-orgea39003" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h2 id="orgea39003">What is nix?</h2>
 <p>
 <i>A single tool to rule them all.</i>
 </p>
@@ -33,8 +33,8 @@
 </ul>
 
 </section>
-<section id="slide-org5c04b86" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org5c04b86">Origins</h3>
+<section id="slide-orgb1f903c" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="orgb1f903c">Origins</h3>
 <p>
 PhD project of Eelco Dolstra
 </p>
@@ -50,8 +50,8 @@ Initially intended to be alternative to <code>make</code> and package managers l
 </p>
 
 </section>
-<section id="slide-org647b38b" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org647b38b">What problmes it tried to solve?</h3>
+<section id="slide-org9f83446" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org9f83446">What problmes it tried to solve?</h3>
 <p>
 Classical package managers issues:
 </p>
@@ -70,8 +70,8 @@ Classical package managers issues:
 </p>
 
 </section>
-<section id="slide-orge0ed445" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="orge0ed445">Filesystem Hierarchy Standard</h3>
+<section id="slide-orge45fa3b" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="orge45fa3b">Filesystem Hierarchy Standard</h3>
 <div class="org-src-container">
 
 <pre class="src src-fish"><span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">list of files installed on filesystem by wget pkg</span>
@@ -102,8 +102,8 @@ $ ldd /usr/bin/wget
 </div>
 
 </section>
-<section id="slide-org13c493b" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org13c493b">Filesystem as memory</h3>
+<section id="slide-org3de6978" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org3de6978">Filesystem as memory</h3>
 <div style="font-size: 40%;">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -192,8 +192,8 @@ $ ldd /usr/bin/wget
 </div>
 
 </section>
-<section id="slide-org4ac0c02" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org4ac0c02">Isolation, reliable identification</h3>
+<section id="slide-org0643b10" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org0643b10">Isolation, reliable identification</h3>
 <p>
 How to avoid address (file path) collision problem?
 </p>
@@ -204,8 +204,8 @@ How to avoid address (file path) collision problem?
 </ul>
 
 </section>
-<section id="slide-org5ece8de" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org5ece8de">Hash</h3>
+<section id="slide-org4fafd66" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org4fafd66">Hash</h3>
 <p>
 The hash is computed over all inputs, including the following:
 </p>
@@ -219,8 +219,8 @@ The hash is computed over all inputs, including the following:
 </ul>
 
 </section>
-<section id="slide-org65199d4" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org65199d4">Nix store</h3>
+<section id="slide-org52aad4b" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org52aad4b">Nix store</h3>
 <div style="font-size: 60%;">
 <div class="org-src-container">
 
@@ -243,8 +243,8 @@ $ ldd /nix/store/d3kkv9vjb3ljh7hr5v38gls8iykvwkny-wget-1.<span style="color: #da
 </div>
 
 </section>
-<section id="slide-org676fd81" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org676fd81">Clousers</h3>
+<section id="slide-orgba064bf" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="orgba064bf">Clousers</h3>
 <p>
 Using hashes allow to identify <b>exact</b> build and runtime dependencies
 </p>
@@ -271,7 +271,7 @@ Using hashes allow to identify <b>exact</b> build and runtime dependencies
 </pre>
 </div>
 
-<div id="org94e840e" class="figure">
+<div id="orgf92b48b" class="figure">
 <p><img src="./images/wget-clouser.png" alt="wget-clouser.png" />
 </p>
 </div>
@@ -295,8 +295,8 @@ Clousers can be distributed accross hosts
 which is used to create distributed <a href="https://nixos.org/manual/nix/stable/advanced-topics/distributed-builds.html">build</a> and <a href="https://nixos.wiki/wiki/Binary_Cache">cache</a> systems.
 </p>
 </section>
-<section id="slide-org42200d7" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org42200d7">Garbage collection</h3>
+<section id="slide-org07375ca" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org07375ca">Garbage collection</h3>
 <div style="font-size: 75%;">
 <div class="org-src-container">
 
@@ -320,8 +320,8 @@ which is used to create distributed <a href="https://nixos.org/manual/nix/stable
 </section>
 </section>
 <section>
-<section id="slide-orgf6ca75d" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h2 id="orgf6ca75d">Nix expression language</h2>
+<section id="slide-org4825538" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h2 id="org4825538">Nix expression language</h2>
 <ul>
 <li>pure functional</li>
 <li>domain specific</li>
@@ -330,8 +330,8 @@ which is used to create distributed <a href="https://nixos.org/manual/nix/stable
 </ul>
 
 </section>
-<section id="slide-org796acb7" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org796acb7">Syntax</h3>
+<section id="slide-orgfc941c0" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="orgfc941c0">Syntax</h3>
 <div class="org-src-container">
 
 <pre class="src src-nix"><span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">operators</span>
@@ -386,8 +386,8 @@ nix-repl&gt; :p <span style="color: #e45649;">let</span>
 </div>
 
 </section>
-<section id="slide-org36401da" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org36401da">Functions</h3>
+<section id="slide-org74c0ff6" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org74c0ff6">Functions</h3>
 <p>
 Nameless function (<i>lambda</i>) always takes exactly one argument
 </p>
@@ -429,8 +429,8 @@ nix-repl&gt; <span style="color: #e45649;">let</span>
 </div>
 
 </section>
-<section id="slide-org909889d" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org909889d">Domain specific</h3>
+<section id="slide-org1e1b615" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org1e1b615">Domain specific</h3>
 <div class="org-src-container">
 
 <pre class="src src-nix">
@@ -446,8 +446,8 @@ nix-repl&gt; <span style="color: #e45649;">let</span>
 </div>
 
 </section>
-<section id="slide-orgdb746f3" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="orgdb746f3">Lazy evaluation</h3>
+<section id="slide-org116981c" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org116981c">Lazy evaluation</h3>
 <div class="org-src-container">
 
 <pre class="src src-nix">nix-repl&gt; <span style="color: #e45649;">let</span>
@@ -468,13 +468,13 @@ nil
 </section>
 </section>
 <section>
-<section id="slide-orge40eff8" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h2 id="orge40eff8">What I can do with nix?</h2>
-<div class="outline-text-2" id="text-orge40eff8">
+<section id="slide-org20095f1" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h2 id="org20095f1">What I can do with nix?</h2>
+<div class="outline-text-2" id="text-org20095f1">
 </div>
 </section>
-<section id="slide-orgf3bb05a" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="orgf3bb05a">Task shell</h3>
+<section id="slide-org6f47028" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org6f47028">Task shell</h3>
 <p>
 Ephermal shell with new package
 </p>
@@ -521,14 +521,14 @@ Create ad hoc env with python and needed modules
 </div>
 
 </section>
-<section id="slide-org30138f0" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org30138f0">Profiles</h3>
+<section id="slide-org99a9bfc" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org99a9bfc">Profiles</h3>
 <p>
 Persistent environments with rollback history and atomic updates
 </p>
 
 
-<div id="org6c603d3" class="figure">
+<div id="orgf0199a5" class="figure">
 <p><img src="./images/profiles.png" alt="profiles.png" />
 </p>
 </div>
@@ -562,15 +562,15 @@ $ nix profile rollback
 </div>
 
 </section>
-<section id="slide-org7908b03" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org7908b03">Flakes</h3>
+<section id="slide-org92e8eda" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org92e8eda">Flakes</h3>
 <p>
 Introduce <code>flake.nix</code> and  <code>flake.lock</code> to clear definitions of inputs and their versions.
 </p>
 
 </section>
-<section id="slide-orge0003d9" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h4 id="orge0003d9">Compose projects</h4>
+<section id="slide-orgf7a9153" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h4 id="orgf7a9153">Compose projects</h4>
 <p>
 Easy access, locked inputs, can produce variety of outputs binaries, container images etc..
 </p>
@@ -663,8 +663,8 @@ $ skopeo copy <span style="color: #50a14f;">"docker-archive://$(</span><span sty
 </div>
 
 </section>
-<section id="slide-org0acc298" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h4 id="org0acc298">Development shell</h4>
+<section id="slide-org01f65ad" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h4 id="org01f65ad">Development shell</h4>
 <p>
 Allow define development environment where all dependencies for your app are available, and share the same experience with other developers.
 </p>
@@ -712,22 +712,22 @@ $ direnv allow
 
 
 </section>
-<section id="slide-orgaa4a34b" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h4 id="orgaa4a34b">Demo</h4>
+<section id="slide-org91df977" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h4 id="org91df977">Demo</h4>
 
 
 </section>
 </section>
 <section>
-<section id="slide-orgac4f665" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h2 id="orgac4f665">One <del>ring</del> system to rule them all</h2>
+<section id="slide-org6ed6599" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h2 id="org6ed6599">One <del>ring</del> system to rule them all</h2>
 <p>
 Nix can be use to install and configure applications but also take care about whole OS configuration.
 </p>
 
 </section>
-<section id="slide-org7b440c6" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org7b440c6">NixOS</h3>
+<section id="slide-org67a7f25" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org67a7f25">NixOS</h3>
 <p>
 Fully integrated with nix, both from packages and configuration standpoint
 </p>
@@ -742,8 +742,8 @@ By default uses <code>channels</code> as a source of packages versions.
 </ul>
 
 </section>
-<section id="slide-orgdabc67e" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h4 id="orgdabc67e">Declarative description of OS</h4>
+<section id="slide-org3c47e36" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h4 id="org3c47e36">Declarative description of OS</h4>
 <p>
 Entire system can be described through <a href="https://nixos.org/manual/nixos/stable/options.html">declarative configuration</a>.
 </p>
@@ -757,8 +757,8 @@ Share common configuration between hosts, making it more modular.
 </p>
 
 </section>
-<section id="slide-org7d8dedd" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h4 id="org7d8dedd">Safe changes</h4>
+<section id="slide-orgf0b8d17" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h4 id="orgf0b8d17">Safe changes</h4>
 <p>
 Test your new configuration in <a href="https://nixos.wiki/wiki/NixOS:nixos-rebuild_build-vm">VM</a> before applying on host:
 </p>
@@ -785,7 +785,7 @@ Boot from previous generation.
 </p>
 
 
-<div id="orgb66f22a" class="figure">
+<div id="org1a9a338" class="figure">
 <p><img src="./images/nixos-boot.png" alt="nixos-boot.png" />
 </p>
 </div>
@@ -794,7 +794,7 @@ Boot from previous generation.
 <section data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
 
 
-<div id="orgf336b9b" class="figure">
+<div id="org69b0271" class="figure">
 <p><img src="./images/nixos-install.jpg" alt="nixos-install.jpg" width="30%" />
 </p>
 </div>
@@ -804,8 +804,8 @@ Run from livecd and restore system from existing config with one command, or gen
 </p>
 
 </section>
-<section id="slide-org7756cd4" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="org7756cd4">nix-darwin</h3>
+<section id="slide-org8ce217a" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="org8ce217a">nix-darwin</h3>
 <p>
 Tries to replicate NixOS behaviour on macOS
 </p>
@@ -815,8 +815,8 @@ Tries to replicate NixOS behaviour on macOS
 </p>
 
 </section>
-<section id="slide-orgf63f7b9" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h3 id="orgf63f7b9">Home manager</h3>
+<section id="slide-orgf1b23a9" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h3 id="orgf1b23a9">Home manager</h3>
 <p>
 <a href="https://github.com/nix-community/home-manager">https://github.com/nix-community/home-manager</a>
 </p>
@@ -833,8 +833,8 @@ Rich library of software configuration.
 </section>
 </section>
 <section>
-<section id="slide-org1f1e10f" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
-<h2 id="org1f1e10f">Additional resources</h2>
+<section id="slide-org0871bbd" data-background="https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg" data-background-size="60%" data-background-opacity="40%">
+<h2 id="org0871bbd">Additional resources</h2>
 <p>
 Nix:
 </p>
@@ -857,11 +857,11 @@ Build systems:
 </section>
 </div>
 </div>
-<script src="/Users/mskalski/.config/emacs/.local/straight/build-28.2/revealjs/dist/reveal.js"></script>
-<script src="/Users/mskalski/.config/emacs/.local/straight/build-28.2/revealjs/plugin/markdown/markdown.js"></script>
-<script src="/Users/mskalski/.config/emacs/.local/straight/build-28.2/revealjs/plugin/notes/notes.js"></script>
-<script src="/Users/mskalski/.config/emacs/.local/straight/build-28.2/revealjs/plugin/search/search.js"></script>
-<script src="/Users/mskalski/.config/emacs/.local/straight/build-28.2/revealjs/plugin/zoom/zoom.js"></script>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
 <script>
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
