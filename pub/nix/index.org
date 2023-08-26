@@ -1,0 +1,650 @@
+#+title:  Nix
+#+REVEAL_ROOT: ./reveal.js
+#+REVEAL_THEME: white
+#+REVEAL_TRANS: none
+#+REVEAL_DEFAULT_SLIDE_BACKGROUND: https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg
+#+REVEAL_DEFAULT_SLIDE_BACKGROUND_SIZE: 60%
+#+REVEAL_DEFAULT_SLIDE_BACKGROUND_OPACITY: 40%
+#+REVEAL_TITLE_SLIDE_BACKGROUND: https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg
+#+REVEAL_TITLE_SLIDE_BACKGROUND_SIZE: 60%
+#+REVEAL_TITLE_SLIDE_BACKGROUND_OPACITY: 40%
+#+REVEAL_TOC_SLIDE_BACKGROUND: https://upload.wikimedia.org/wikipedia/commons/2/28/Nix_snowflake.svg
+#+REVEAL_TOC_SLIDE_BACKGROUND_SIZE: 60%
+#+REVEAL_TOC_SLIDE_BACKGROUND_OPACITY: 40%
+# #+REVEAL_PLUGINS: (highlight)
+#+OPTIONS: timestamp:nil toc:nil num:nil
+
+* What is nix?
+/A single tool to rule them all./
+
+  #+ATTR_REVEAL: :frag (appear)
+  - language (domain specific)
+  - [[https://github.com/NixOS/nixpkgs][package manager]]
+  - main pilar of [[https://nixos.org/][NixOS]] - operating system
+
+** Origins
+
+PhD project of Eelco Dolstra
+
++ [[https://edolstra.github.io/pubs/immdsd-icse2004-final.pdf][Imposing a Memory Management Discipline on Software Deployment (2004)]]
++ [[https://edolstra.github.io/pubs/phd-thesis.pdf][The Purely Functional Software Deployment Model (2005)]]
+
+Initially intended to be alternative to ~make~ and package managers like ~rpm~
+
+** What problmes it tried to solve?
+
+Classical package managers issues:
+
++ DLL hell
++ Destructive upgrades
++ No rollbacks
++ Not atomic
++ Hard to prevent undeclared dependencies
+
+/YouTube: [[https://www.youtube.com/watch?v=h8hWX_aGGDc][Eelco Dolstra - The Evolution of Nix]]/
+
+** Filesystem Hierarchy Standard
+
+#+begin_src fish
+# list of files installed on filesystem by wget pkg
+$ dpkg -L wget
+...
+/etc/wgetrc
+/usr/bin/wget
+/usr/share/doc/wget/README
+/usr/share/man/man1/wget.1.gz
+#+end_src
+
+#+begin_src fish
+# dynamically linked libraries
+$ ldd /usr/bin/wget
+libpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0
+libuuid.so.1 => /lib/x86_64-linux-gnu/libuuid.so.1
+libidn2.so.0 => /lib/x86_64-linux-gnu/libidn2.so.0
+libssl.so.3 => /lib/x86_64-linux-gnu/libssl.so.3
+libcrypto.so.3 => /lib/x86_64-linux-gnu/libcrypto.so.3
+libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1
+libpsl.so.5 => /lib/x86_64-linux-gnu/libpsl.so.5
+libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6
+/lib64/ld-linux-x86-64.so.2
+libunistring.so.2 => /lib/x86_64-linux-gnu/libunistring.so.2
+#+end_src
+
+** Filesystem as memory
+
+#+REVEAL_HTML: <div style="font-size: 40%;">
+| Programming Language Domain                                                                       | Deployment Domain                                                              |
+|---------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------|
+| memory                                                                                            | disk                                                                           |
+| value, object                                                                                     | file                                                                           |
+| address                                                                                           | path name                                                                      |
+| pointer dereference                                                                               | file access                                                                    |
+| pointer arithmetic                                                                                | string operations                                                              |
+| dangling pointer                                                                                  | path to absent file                                                            |
+| object graph                                                                                      | dependency graph                                                               |
+| calling constructed object with reference to other object                                         | runtime dependency                                                             |
+| calling constructor with reference to other object, not stored                                    | build-time dependency                                                          |
+| calling constructor with reference to other object, stored                                        | retained dependency                                                            |
+| languages without pointer discipline (e.g. assembler)                                             | typical Unix-style deployment                                                  |
+| languages with enough pointer discipline to support conservative garbage collection (e.g. C, C++) | Nix                                                                            |
+| languages with full pointer discipline (e.g. Java, Haskell)                                       | as-yet unknown deployment style not enabled  by contemporary operating systems |
+/Source: The Purely Functional Software Deployment Model/
+#+REVEAL_HTML: </div>
+
+** Isolation, reliable identification
+
+How to avoid address (file path) collision problem?
+#+ATTR_REVEAL: :frag (appear)
++ component name, version is not enough
++ random address is inefficient, generates duplicates
+
+** Hash
+
+The hash is computed over all inputs, including the following:
+
+#+ATTR_REVEAL: :frag (appear)
++ The sources of the components.
++ The script that performed the build.
++ Any arguments or environment variables passed to the build script.
++ All build time dependencies, typically including the compiler, linker, any libraries used at build time, standard Unix tools such as cp and tar, the shell, and so on..
+
+** Nix store
+
+#+REVEAL_HTML: <div style="font-size: 60%;">
+#+begin_src fish
+$ which wget
+/nix/store/d3kkv9vjb3ljh7hr5v38gls8iykvwkny-wget-1.21.4/bin/wget
+
+$ ldd /nix/store/d3kkv9vjb3ljh7hr5v38gls8iykvwkny-wget-1.21.4/bin/wget
+libpcre.so.1 => /nix/store/pxl4n1lrns2xhc8f1s04srb4cphlg5cz-pcre-8.45/lib/libpcre.so.1
+libuuid.so.1 => /nix/store/y5975fancsig22f6xw22mmmffn19n8zp-util-linux-minimal-2.39-lib/lib/libuuid.so.1
+libidn2.so.0 => /nix/store/vh4pdds47783g12fmywazdx3v3kx0j4x-libidn2-2.3.4/lib/libidn2.so.0
+libssl.so.3 => /nix/store/ix7cb1isdcdl4gq9hl4pdk6gyc4wrk14-openssl-3.0.9/lib/libssl.so.3
+libcrypto.so.3 => /nix/store/ix7cb1isdcdl4gq9hl4pdk6gyc4wrk14-openssl-3.0.9/lib/libcrypto.so.3
+libz.so.1 => /nix/store/mgz7sp9jxnk7c3rn1hvich9n0k2rjr7m-zlib-1.2.13/lib/libz.so.1
+libc.so.6 => /nix/store/ayg065nw0xi1zsyi8glfh5pn4sfqd8xg-glibc-2.37-8/lib/libc.so.6
+libunistring.so.5 => /nix/store/aw137ya6rvy61zw8ydsz22xwarsr8ynf-libunistring-1.1/lib/libunistring.so.5
+libdl.so.2 => /nix/store/ayg065nw0xi1zsyi8glfh5pn4sfqd8xg-glibc-2.37-8/lib/libdl.so.2
+libpthread.so.0 => /nix/store/ayg065nw0xi1zsyi8glfh5pn4sfqd8xg-glibc-2.37-8/lib/libpthread.so.0
+#+end_src
+#+REVEAL_HTML: </div>
+
+** Clousers
+
+Using hashes allow to identify *exact* build and runtime dependencies
+
+#+begin_src fish
+$ nix-store -qR $(which wget)
+/nix/store/6kyaqlxcmfadiiq0mcdj1symv1jsp58w-xgcc-12.3.0-libgcc
+/nix/store/aw137ya6rvy61zw8ydsz22xwarsr8ynf-libunistring-1.1
+/nix/store/vh4pdds47783g12fmywazdx3v3kx0j4x-libidn2-2.3.4
+/nix/store/ayg065nw0xi1zsyi8glfh5pn4sfqd8xg-glibc-2.37-8
+/nix/store/ix7cb1isdcdl4gq9hl4pdk6gyc4wrk14-openssl-3.0.9
+/nix/store/mgz7sp9jxnk7c3rn1hvich9n0k2rjr7m-zlib-1.2.13
+/nix/store/pxl4n1lrns2xhc8f1s04srb4cphlg5cz-pcre-8.45
+/nix/store/y5975fancsig22f6xw22mmmffn19n8zp-util-linux-minimal-2.39-lib
+/nix/store/d3kkv9vjb3ljh7hr5v38gls8iykvwkny-wget-1.21.4
+#+end_src
+#+REVEAL: split
+#+begin_src fish
+nix-store -q --graph $(which wget)
+#+end_src
+[[./images/wget-clouser.png]]
+#+REVEAL_HTML: <div style="font-size: 60%;">
+/Clouser of runtime dependencies/
+#+REVEAL_HTML: </div>
+#+REVEAL: split
+Clousers can be distributed accross hosts
+#+begin_src fish
+nix copy --to ssh-ng://remote-host /nix/store/qh4y4iw...
+#+end_src
+
+which is used to create distributed [[https://nixos.org/manual/nix/stable/advanced-topics/distributed-builds.html][build]] and [[https://nixos.wiki/wiki/Binary_Cache][cache]] systems.
+** Garbage collection
+
+#+REVEAL_HTML: <div style="font-size: 75%;">
+#+begin_src fish
+$ nix-collect-garbage
+finding garbage collector roots...
+removing stale temporary roots file '/nix/var/nix/temproots/1023955'
+deleting garbage...
+deleting '/nix/store/mvqj8avzhkqabkg51cyz617qnhzzawhl-anstyle-wincon-1.0.1'
+deleting '/nix/store/xzspb26l48b7hlhmlp6ac6sbivil0kgj-rust-operator-deps-0.1.0'
+deleting '/nix/store/q512fyfmpmdw0ap391j8vkdd8j435545-rust-operator-deps-0.1.0'
+deleting '/nix/store/gdnzfmns1ryh2pg5z9zbl0jgdspmmmx0-vendor-cargo-deps'
+...
+deleting unused links...
+note: currently hard linking saves -0.00 MiB
+1855 store paths deleted, 7729.65 MiB freed
+#+end_src
+#+REVEAL_HTML: </div>
+
+
+* Nix expression language
+
+- pure functional
+- domain specific
+- lazy evaluation
+
+** Syntax
+
+#+begin_src nix
+# operators
+nix-repl> 1 + 2
+3
+nix-repl> [ 1 2 ] ++ [ 3 ]
+[ 1 2 3 ]
+
+# let ... in ..., allow repeated use of variables in scope
+# string interpolation
+nix-repl> let
+            name = "World";
+          in
+            "hello ${name}!"
+hello World!
+
+# attribute set, attributes accessible by '.'
+# with ..., expose attributes directly
+nix-repl> let
+            attrs = { a = "str"; b = false; i = 3; };
+          in
+            with attrs; [ a attrs.b i ]
+[ "str" false 3 ]
+
+#+end_src
+#+REVEAL: split
+#+begin_src nix
+# merging attr sets
+# dynamic typing
+nix-repl> let
+            attrs1 = { a = "str"; b = false; };
+            attrs2 = { b = 10; i = 3; };
+          in
+            attrs1 // attrs2
+{ a = "str"; b = 10; i = 3; }
+
+# inherit, assign existing values in nested scope
+nix-repl> :p let
+            x = { b = 1; };
+            y = 2;
+            z = false;
+          in
+          {
+            inherit x y;
+            z = z;
+          }
+{ x = { b = 1; }; y = 2; z = false; }
+#+end_src
+
+** Functions
+
+Nameless function (/lambda/) always takes exactly one argument
+
+#+begin_src nix
+# argument: function body
+nix-repl> let
+            f = x: x + 1;
+          in
+          {
+            type = builtins.typeOf f;
+            result = f 1;
+          }
+{ result = 2; type = "lambda"; }
+
+# nested functions, x: (y: x + y)
+nix-repl> let
+  f = x: y: x + y;
+in
+  f 1 2
+3
+#+end_src
+#+REVEAL: split
+#+begin_src nix
+# attr set as argument, defined attr must be passed
+# ?, default value
+# ... , extra attrs
+# @name, named attr set
+nix-repl> let
+            f = {a, b ? 1, ...}@args: a + b + args.c;
+          in
+            f { a = 1; c = 1; }
+3
+#+end_src
+
+** Domain specific
+
+#+begin_src nix
+
+nix-repl> 6/3
+/Users/mskalski/org/6/3
+
+nix-repl> let
+            r = 6/3;
+          in
+            builtins.typeOf r
+"path"
+#+end_src
+
+** Lazy evaluation
+
+#+BEGIN_SRC nix
+nix-repl> let
+            f = builtins.fetchurl "http://127.0.0.1:8000/f";
+            b = 3;
+          in
+            b
+3
+# no request has been made to http server
+#+END_SRC
+
+#+BEGIN_NOTES
+# https://news.ycombinator.com/item?id=28240748
+#+END_NOTES
+
+
+* What I can do with nix?
+
+** Task shell
+
+Ephermal shell with new package
+#+begin_src fish
+~ ❯ cowsay "nix is awesome!"
+Unknown command: cowsay
+
+~ ❯ nix-shell -p cowsay
+[nix-shell:~]$ cowsay "nix is awesome!"
+ _________________
+< nix is awesome! >
+ -----------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+[nix-shell:~]$ exit
+
+~ ❯ cowsay "nix is awesome!"
+Unknown command: cowsay
+#+end_src
+#+REVEAL: split
+Create ad hoc env with python and needed modules
+#+REVEAL_HTML: <div style="font-size: 80%;">
+#+begin_src fish
+~ ❯ python3 -c "import bcrypt; print(bcrypt.__version__)"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'bcrypt'
+
+~ ❯ nix-shell -p "python3.withPackages(p: [ p.bcrypt ])"
+[nix-shell:~]$ python3 -c "import bcrypt; print(bcrypt.__version__)"
+4.0.1
+#+end_src
+#+REVEAL_HTML: </div>
+
+** Profiles
+Persistent environments with rollback history and atomic updates
+
+[[./images/profiles.png]]
+
+#+REVEAL_HTML: <div style="font-size: 40%;">
+/Source: The Purely Functional Software Deployment Model/
+#+REVEAL_HTML: </div>
+#+REVEAL: split
+#+begin_src fish
+# Install btop package in user environment (new generation)
+$ nix profile install nixpkgs#btop
+
+# Compare changes between generations
+$ nix profile diff-closures
+Version 6 -> 7:
+  btop: ∅ → 1.2.13, +1637.7 KiB
+  gcc: ∅ → 12.3.0, +15845.2 KiB
+  glibc: ∅ → 2.37-8, +29536.3 KiB
+  libidn2: ∅ → 2.3.4, +350.4 KiB
+  libunistring: ∅ → 1.1, +1813.8 KiB
+  xgcc: ∅ → 12.3.0, +139.1 KiB
+
+# Revert to previous generation
+$ nix profile rollback
+switching profile from version 7 to 6
+#+end_src
+
+** Flakes
+
+Introduce ~flake.nix~ and  ~flake.lock~ to clear definitions of inputs and their versions.
+
+*** Compose projects
+
+Easy access, locked inputs, can produce variety of outputs: binaries, container images etc..
+
+#+REVEAL_HTML: <div style="font-size: 70%;">
+#+begin_src fish
+$ nix flake show github:michalskalski/axact
+github:michalskalski/axact/9ca2f50dc4fb836af6e16dc03190cd2055d9f24b
+├───devShell
+│   ├───aarch64-darwin omitted (use '--all-systems' to show)
+│   ├───aarch64-linux omitted (use '--all-systems' to show)
+│   ├───x86_64-darwin omitted (use '--all-systems' to show)
+│   └───x86_64-linux: development environment 'nix-shell'
+└───packages
+    ├───aarch64-darwin
+    │   ├───bin omitted (use '--all-systems' to show)
+    │   ├───default omitted (use '--all-systems' to show)
+    │   └───ociImage omitted (use '--all-systems' to show)
+    ├───aarch64-linux
+    │   ├───bin omitted (use '--all-systems' to show)
+    │   ├───default omitted (use '--all-systems' to show)
+    │   └───ociImage omitted (use '--all-systems' to show)
+    ├───x86_64-darwin
+    │   ├───bin omitted (use '--all-systems' to show)
+    │   ├───default omitted (use '--all-systems' to show)
+    │   └───ociImage omitted (use '--all-systems' to show)
+    └───x86_64-linux
+        ├───bin: package 'axact-0.1.0'
+        ├───default: package 'axact-0.1.0'
+        └───ociImage: package 'docker-image-axact.tar.gz'
+#+end_src
+#+REVEAL_HTML: </div>
+#+REVEAL: split
+Build binary
+#+REVEAL_HTML: <div style="font-size: 70%;">
+#+begin_src fish
+$ nix build github:michalskalski/axact#packages.x86_64-linux.bin
+
+# by default it produce 'result' symlink in current directory
+$ ls -l
+result -> /nix/store/qh4y4iwh0q40q5xxlp61bimhx8i6dp9i-axact-0.1.0
+
+$ nix path-info --json $(realpath result) | jq .
+[
+  {
+    "deriver": "/nix/store/gkxa58jxq5a9z7187afx0lywkckxr05b-axact-0.1.0.drv",
+    "narHash": "sha256-cLMwsb0BQCRGXB1M+KGruZB+lR0gZRV3UKOFalkgONE=",
+    "narSize": 6295640,
+    "path": "/nix/store/qh4y4iwh0q40q5xxlp61bimhx8i6dp9i-axact-0.1.0",
+    "references": [
+      "/nix/store/c50v7bf341jsza0n07784yvzp5fzjpn5-gcc-12.3.0-lib",
+      "/nix/store/vq3sdi8l15rzfl5zvmwpafrzis4sm6xf-glibc-2.37-8"
+    ],
+    "registrationTime": 1692975733,
+    "ultimate": true,
+    "valid": true
+  }
+]
+#+end_src
+#+REVEAL_HTML: </div>
+#+REVEAL: split
+Build container image
+#+REVEAL_HTML: <div style="font-size: 70%;">
+#+begin_src fish
+$ nix build github:michalskalski/axact#packages.x86_64-linux.ociImage
+
+$ ls -l result
+result -> /nix/store/sn1yivqy1c1qjhypq3n515g4r47rgp0k-docker-image-axact.tar.gz
+
+# load image to local docker instance
+$ docker load < result
+941c04e2c681: Loading layer [=======================================>]  47.59MB/47.59MB
+Loaded image: axact:latest
+
+# but docker is not needed
+$ skopeo copy "docker-archive://$(realpath result)" "docker://registry-address/img:tag"
+#+end_src
+#+REVEAL_HTML: </div>
+
+*** Development shell
+
+Allow define development environment where all dependencies for your app are available, and share the same experience with other developers.
+
+#+begin_src fish
+$ nix develop github:michalskalski/axact
+#+end_src
+
+#+begin_src nix
+# flake.nix
+...
+devShell = mkShell {
+    inputsFrom = [ bin ];
+    buildInputs = [dive skopeo] ++ darwinPkgs;
+};
+#+end_src
+#+REVEAL: split
+Use [[https://direnv.net/][direnv]] for seamless experience, your editor probably understand it too.
+
+#+begin_src fish
+$ ls -a project/
+.envrc  flake.nix ..
+
+$ cat project/.envrc
+use flake
+
+$ cd project/
+direnv: error project/.envrc is blocked.
+Run `direnv allow` to approve its content
+
+$ direnv allow
+direnv: loading project/.envrc
+direnv: using flake
+direnv: nix-direnv: using cached dev shell
+#+end_src
+
+*** Demo
+#+ATTR_HTML: :width 60%
+[[https://asciinema.org/a/604780?speed=1.5][file:images/604780.svg]]
+#+BEGIN_NOTES
+#+begin_src fish
+
+# Nix flakes can be easly accessible
+# let's see outputs provided by flake located at github
+nix flake show github:michalskalski/axact
+
+# there is a package binary output, let' built it
+nix build github:michalskalski/axact#packages.x86_64-linux.bin
+
+# it created in current dir symlink to nix store path where binary is located
+ls -l
+result/bin/axact --help
+
+# store path to which result points in variable
+RPATH=$(realpath result)
+echo $RPATH
+
+# nix is aware of all of build and runtime dependencies of the program, they are represented as clousers
+# let's see runtime clouser
+nix-store -q --tree $RPATH
+
+# we can copy clousers to remote hosts
+# currently remote host does not have our program
+ssh remote axact --help
+nix copy --to ssh-ng://remote $RPATH
+
+# first we have to sign our outputs with key trusted by other side
+nix-store -qR $RPATH
+nix-store -qR $RPATH | nix store sign --key-file ~/secret/secret-store --stdin
+
+# now our paths should have correct signatures
+nix path-info --json $RPATH | jq .
+
+# let's try again
+nix copy --to ssh-ng://remote $RPATH
+
+# clouser is copied, we can add it now to current profile on remote host
+ssh remote nix profile install $RPATH
+ssh remote nix profile list
+
+# program is ready to use
+ssh remote axact --help
+
+# we can distribute program in other ways, like container images
+# our flake support this output
+nix flake show github:michalskalski/axact
+nix build github:michalskalski/axact#packages.x86_64-linux.ociImage
+ls -l result
+
+# now result symlink points to path where container image is stored
+# we can load it directly to docker
+docker load < result
+
+# and run
+docker run --name test-app -d axact
+docker logs test-app
+
+# there is one type of the output left - devShell
+# usually when activated it provides everything what developers need to work on application
+# like compilers, libraries but also scripts and tools
+# I would like to know more about produced container image, and use dive program for it
+dive
+
+# unfortunately it is not installed on my machine, but should be available in dev shell
+nix develop github:michalskalski/axact
+dive -v
+
+# cool, dive operates on uncompressed archives, let's unpack image first
+gunzip -c result > /tmp/image.tar
+dive --source docker-archive /tmp/image.tar
+
+# container image is slim and contain only required runtime dependencies
+# that is all, thank you
+
+
+
+#+end_src
+#+END_NOTES
+
+* One +ring+ system to rule them all
+
+Nix can be use to install and configure applications but also take care about whole OS configuration.
+
+** NixOS
+
+Fully integrated with nix, both from packages and configuration standpoint
+
+#+ATTR_REVEAL: :frag (appear)
+By default uses ~channels~ as a source of packages versions.
+#+ATTR_REVEAL: :frag (appear)
++ stable channels released every six month (for ex. 22.11, 23.05)
++ unstable - rolling release
+
+*** Declarative description of OS
+
+Entire system can be described through [[https://nixos.org/manual/nixos/stable/options.html][declarative configuration]].
+
+#+ATTR_REVEAL: :frag (appear)
+Store configuration in repository, even better, make it ~flake~ and describe multiple hosts as separate outputs.
+
+#+ATTR_REVEAL: :frag (appear)
+Share common configuration between hosts, making it more modular.
+
+*** Safe changes
+
+Test your new configuration in [[https://nixos.wiki/wiki/NixOS:nixos-rebuild_build-vm][VM]] before applying on host:
+
+#+begin_src fish
+# will start local vm with current system configuration
+$ nixos-rebuild build-vm
+#+end_src
+
+#+REVEAL: split
+Every package install in system profile creates new generation and entry for it in bootloader.
+
+#+ATTR_REVEAL: :frag (appear)
+System does not start after upgrade?
+
+#+ATTR_REVEAL: :frag (appear)
+Boot from previous generation.
+
+[[./images/nixos-boot.png]]
+
+#+REVEAL: split
+
+#+ATTR_HTML: :width 30%
+[[./images/nixos-install.jpg]]
+
+Run from livecd and restore system from existing config with one command, or generate disk image ahead.
+
+** nix-darwin
+
+Tries to replicate NixOS behaviour on macOS
+
+https://github.com/LnL7/nix-darwin
+
+** Home manager
+
+https://github.com/nix-community/home-manager
+
+Standalone or module for NixOS or nix-darwin
+
+Rich library of software configuration.
+
+
+* Additional resources
+
+Nix:
++ https://nixos.org/learn
++ https://zero-to-nix.com/
++ https://nixos.org/guides/nix-pills/
+
+Build systems:
++ [[https://www.microsoft.com/en-us/research/uploads/prod/2018/03/build-systems.pdf][Build Systems à la Carte (2018)]]
++ YouTube: [[https://www.youtube.com/watch?v=BQVT6wiwCxM][Build Systems à la Carte]]
