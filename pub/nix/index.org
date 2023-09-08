@@ -489,6 +489,24 @@ direnv: using flake
 direnv: nix-direnv: using cached dev shell
 #+end_src
 
+*** Overlays
+
+If your project depends on specific version of system library, or you need extra patches, you can easly modify it at your project level with [[https://nixos.wiki/wiki/Overlays][overlays]].
+
+#+begin_src nix
+
+example_overlay = final: prev: {
+  package = prev.package.overrideAttrs (old: {
+    version = "";
+    src = prev.fetchurl {
+      url = "";
+      hash = "";
+    };
+  });
+}
+
+#+end_src
+
 *** Demo
 #+ATTR_HTML: :width 60%
 [[https://asciinema.org/a/604780?speed=1.5][file:images/604780.svg]]
