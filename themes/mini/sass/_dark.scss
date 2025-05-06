@@ -1,0 +1,33 @@
+// sass/_dark.scss
+
+.dark-theme {
+    // Base colors
+    --color-bg: #1e1e2e;
+    --color-bg-alt: #2a2a3a;
+    --color-text: #e0e0e0;
+    --color-text-muted: #a0a0a0;
+    --color-border: #444444;
+
+    // Accent colors
+    --color-primary: #7e9cd8;
+    --color-primary-hover: #98b0e3;
+    --color-link: #7e9cd8;
+    --color-link-hover: #98b0e3;
+
+    // Code blocks
+    --color-code-bg: #2a2a3a;
+    --color-code-text: #e0e0e0;
+    --color-code-border: #444444;
+
+    // Syntax highlighting (muted but readable)
+    --color-syntax-comment: #8b8b8b;
+    --color-syntax-keyword: #c678dd;
+    --color-syntax-string: #98c379;
+    --color-syntax-function: #7e9cd8;
+    --color-syntax-variable: #e5c07b;
+    --color-syntax-number: #d19a66;
+
+    // UI elements
+    --color-header-bg: rgba(30, 30, 46, 0.95);
+    --color-shadow: rgba(0, 0, 0, 0.2);
+}

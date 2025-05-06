@@ -1,0 +1,36 @@
+# Basic site configuration
+base_url = "https://www.skalski.dev"
+title = "skalski.dev"
+description = "Michal Skalski's personal page"
+default_language = "en"
+compile_sass = true
+build_search_index = false
+generate_feeds = true
+
+# Theme selection
+theme = "mini"
+
+[markdown]
+highlight_code = true
+highlight_theme = "css"  # This will be used for inline code
+
+# Generate theme CSS files, expected by my template
+highlight_themes_css = [
+  { theme = "base16-ocean-dark", filename = "syntax-theme-dark.css" },
+  { theme = "base16-ocean-light", filename = "syntax-theme-light.css" },
+]
+
+# Theme-specific configuration
+[extra]
+# Author information
+author = "Michal Skalski"
+
+# Default to dark theme if the user hasn't selected one yet and prefers dark
+default_theme = "auto" # "light", "dark", or "auto"
+
+# Social links that will appear on the about page
+github = "https://github.com/michalskalski"
+linkedin = "https://linkedin.com/in/michalskalski"
+
+# Avatar path (relative to the static folder)
+avatar = "/images/avatar.webp"

@@ -1,0 +1,13 @@
+# theme.toml - Theme metadata for Zola
+
+name = "minimalist"
+description = "A minimalist theme focused on readability and content"
+license = "MIT"
+homepage = "https://github.com/michalskalski/michalskalski.github.io"
+
+min_version = "0.15.0"
+
+# The theme author info
+[author]
+name = "Michal Skalski"
+homepage = "https://www.skalski.dev"
