@@ -1,0 +1,33 @@
+// sass/_light.scss
+
+.light-theme {
+    // Base colors
+    --color-bg: #ffffff;
+    --color-bg-alt: #f5f5f5;
+    --color-text: #333333;
+    --color-text-muted: #666666;
+    --color-border: #e0e0e0;
+
+    // Accent colors
+    --color-primary: #3a5caa;
+    --color-primary-hover: #2a4a8a;
+    --color-link: #3a5caa;
+    --color-link-hover: #2a4a8a;
+
+    // Code blocks
+    --color-code-bg: #f5f5f5;
+    --color-code-text: #333333;
+    --color-code-border: #e0e0e0;
+
+    // Syntax highlighting (muted but readable)
+    --color-syntax-comment: #707070;
+    --color-syntax-keyword: #8b3a8c;
+    --color-syntax-string: #2a7a40;
+    --color-syntax-function: #3a5caa;
+    --color-syntax-variable: #a0522d;
+    --color-syntax-number: #5e64c3;
+
+    // UI elements
+    --color-header-bg: rgba(255, 255, 255, 0.95);
+    --color-shadow: rgba(0, 0, 0, 0.05);
+}
