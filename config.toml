@@ -1,5 +1,5 @@
 # Basic site configuration
-base_url = "https://www.skalski.dev"
+base_url = "https://skalski.dev"
 title = "skalski.dev"
 description = "Michal Skalski's personal page"
 default_language = "en"

@@ -1,7 +1,7 @@
 # config.example.toml - Example site configuration
 
 # Basic site configuration
-base_url = "https://www.skalski.dev"
+base_url = "https://yourdomain.com"
 title = "Your Site Title"
 description = "Your site description goes here"
 default_language = "en"
