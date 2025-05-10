@@ -158,7 +158,10 @@ We can even visualize the dependency graph of a package:
 nix-store -q --graph $(which wget)
 ```
 
-This would generate a graph showing all relationships between packages.
+This will generate a graph showing all relationships between packages:
+
+![nix closure for wget package](wget-closure.png "nix closure")
+
 
 The beauty of closures is that they can be distributed across hosts, which enables powerful distributed build and cache systems:
 
