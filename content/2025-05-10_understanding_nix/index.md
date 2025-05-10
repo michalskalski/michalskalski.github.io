@@ -3,7 +3,7 @@ title = "Understanding Nix: A Purely Functional Approach to Package Management"
 date = 2025-05-10
 +++
 
-_This is a text version of the presentation I made a while ago about Nix and NixOS. The presentation [can be seen here](/pub/nix/index.html)._
+_This is a text version of the presentation I made a while ago about Nix and NixOS. The presentation [can be seen here](/pub/nix/nix.pdf)._
 
 Over the past few years, I've been exploring different approaches to managing software environments and deployments. Among them, Nix has stood out as a fascinating solution that takes a fundamentally different approach. In this post, I'll share what I've learned about Nix and why it might be worth your attention.
 
