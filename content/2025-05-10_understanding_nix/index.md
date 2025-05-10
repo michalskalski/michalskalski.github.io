@@ -42,7 +42,7 @@ These issues stem from the fundamental design of how software is installed and m
 
 To understand what makes Nix different, let's first look at how traditional systems handle software installation. In standard Linux distributions, packages install files in fixed locations according to the [Filesystem Hierarchy Standard](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard):
 
-```
+```bash
 # list of files installed on filesystem by wget pkg
 ~ ❯ dpkg -L wget
 ...
@@ -54,7 +54,7 @@ To understand what makes Nix different, let's first look at how traditional syst
 
 Programs often rely on dynamically linked libraries that are shared across the system:
 
-```
+```bash
 # dynamically linked libraries
 ~ ❯ ldd /usr/bin/wget
 libpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0
@@ -116,7 +116,7 @@ This hash becomes part of the path where the package is stored, ensuring that di
 
 The cornerstone of Nix is the **/nix/store** directory, where all packages are stored using their unique hash identifiers. For example:
 
-```
+```bash
 ~ ❯ which wget
 /nix/store/d3kkv9vjb3ljh7hr5v38gls8iykvwkny-wget-1.21.4/bin/wget
 
@@ -139,7 +139,7 @@ Notice how each library has its own unique path in the store. This isolation pre
 
 A "closure" in Nix represents the complete set of dependencies required by a package. Using cryptographic hashes allows Nix to identify the **exact** build and runtime dependencies of any package:
 
-```
+```bash
 ~ ❯ nix-store -qR $(which wget)
 /nix/store/6kyaqlxcmfadiiq0mcdj1symv1jsp58w-xgcc-12.3.0-libgcc
 /nix/store/aw137ya6rvy61zw8ydsz22xwarsr8ynf-libunistring-1.1
@@ -154,8 +154,8 @@ A "closure" in Nix represents the complete set of dependencies required by a pac
 
 We can even visualize the dependency graph of a package:
 
-```
-nix-store -q --graph $(which wget)
+```bash
+~ ❯ nix-store -q --graph $(which wget)
 ```
 
 This will generate a graph showing all relationships between packages:
@@ -165,8 +165,8 @@ This will generate a graph showing all relationships between packages:
 
 The beauty of closures is that they can be distributed across hosts, which enables powerful distributed build and cache systems:
 
-```
-nix copy --to ssh-ng://remote-host /nix/store/qh4y4iw...
+```bash
+~ ❯ nix copy --to ssh-ng://remote-host /nix/store/qh4y4iw...
 ```
 
 This is the foundation for Nix's [distributed builds](https://nixos.org/manual/nix/stable/advanced-topics/distributed-builds.html) and [binary cache](https://nixos.wiki/wiki/Binary_Cache) systems.
@@ -175,7 +175,7 @@ This is the foundation for Nix's [distributed builds](https://nixos.org/manual/n
 
 Since the Nix store can accumulate packages over time, Nix provides a garbage collection mechanism to reclaim space by removing packages that aren't referenced by any active profiles:
 
-```
+```bash
 ~ ❯ nix-collect-garbage
 finding garbage collector roots...
 removing stale temporary roots file '/nix/var/nix/temproots/1023955'
@@ -202,119 +202,129 @@ Nix has its own domain-specific language for defining packages and configuration
 
 Let's explore some basic syntax of the Nix language:
 
-```
+```nix
 # operators
-nix-repl> 1 + 2
-3
-nix-repl> [ 1 2 ] ++ [ 3 ]
-[ 1 2 3 ]
+1 + 2
+> 3
+[ 1 2 ] ++ [ 3 ]
+> [ 1 2 3 ]
+```
 
+```nix
 # let ... in ..., allow repeated use of variables in scope
 # string interpolation
-nix-repl> let
-            name = "World";
-          in
-            "hello ${name}!"
-hello World!
+# nix-repl>
+let
+    name = "World";
+in
+    "hello ${name}!"
+> hello World!
+```
 
+```nix
 # attribute set, attributes accessible by '.'
 # with ..., expose attributes directly
-nix-repl> let
-            attrs = { a = "str"; b = false; i = 3; };
-          in
-            with attrs; [ a attrs.b i ]
-[ "str" false 3 ]
+let
+    attrs = { a = "str"; b = false; i = 3; };
+in
+    with attrs; [ a attrs.b i ]
+> [ "str" false 3 ]
 ```
 
 We can merge attribute sets and use the ```inherit``` keyword to bring variables into scope:
 
-```
+```nix
 # merging attr sets
 # dynamic typing
-nix-repl> let
-            attrs1 = { a = "str"; b = false; };
-            attrs2 = { b = 10; i = 3; };
-          in
-            attrs1 // attrs2
-{ a = "str"; b = 10; i = 3; }
+let
+    attrs1 = { a = "str"; b = false; };
+    attrs2 = { b = 10; i = 3; };
+in
+    attrs1 // attrs2
+> { a = "str"; b = 10; i = 3; }
+```
 
+```nix
 # inherit, assign existing values in nested scope
-nix-repl> :p let
-            x = { b = 1; };
-            y = 2;
-            z = false;
-          in
-          {
-            inherit x y;
-            z = z;
-          }
-{ x = { b = 1; }; y = 2; z = false; }
+let
+    x = { b = 1; };
+    y = 2;
+    z = false;
+in
+    {
+      inherit x y;
+      z = z;
+    }
+> { x = { b = 1; }; y = 2; z = false; }
 ```
 
 ### Functions
 
 In Nix, functions are nameless (lambdas) and always take exactly one argument:
 
-```
+```nix
 # argument: function body
-nix-repl> let
-            f = x: x + 1;
-          in
-          {
-            type = builtins.typeOf f;
-            result = f 1;
-          }
-{ result = 2; type = "lambda"; }
-
-# nested functions, x: (y: x + y)
-nix-repl> let
-  f = x: y: x + y;
+let
+    f = x: x + 1;
 in
-  f 1 2
-3
+    {
+      type = builtins.typeOf f;
+      result = f 1;
+    }
+> { result = 2; type = "lambda"; }
+```
+
+```nix
+# nested functions, x: (y: x + y)
+let
+    f = x: y: x + y;
+in
+    f 1 2
+> 3
 ```
 
 Functions can also take attribute sets as arguments, with optional default values:
 
-```
+```nix
 # attr set as argument, defined attr must be passed
 # ?, default value
 # ... , extra attrs
 # @name, named attr set
-nix-repl> let
-            f = {a, b ? 1, ...}@args: a + b + args.c;
-          in
-            f { a = 1; c = 1; }
-3
+let
+    f = {a, b ? 1, ...}@args: a + b + args.c;
+in
+    f { a = 1; c = 1; }
+> 3
 ```
 
 ### Domain-Specific Features
 
 Nix has some unique behaviors due to its domain-specific nature. For example, division symbols in paths are interpreted literally:
 
+```nix
+6/3
+> /Users/mskalski/org/6/3
 ```
-nix-repl> 6/3
-/Users/mskalski/org/6/3
 
-nix-repl> let
-            r = 6/3;
-          in
-            builtins.typeOf r
-"path"
+```nix
+let
+    r = 6/3;
+in
+    builtins.typeOf r
+> "path"
 ```
 
 ### Lazy Evaluation
 
 Nix uses lazy evaluation, meaning expressions are only evaluated when their results are needed:
 
-```
-nix-repl> let
-            f = builtins.fetchurl "http://127.0.0.1:8000/f";
-            b = 3;
-          in
-            b
-3
-# no request has been made to http server
+```nix
+let
+    f = builtins.fetchurl "http://127.0.0.1:8000/f";
+    b = 3;
+in
+    b
+> 3 # no request has been made to http server
 ```
 
 In this example, even though we defined a function to fetch a URL, no network request was made because the result wasn't needed.
@@ -350,7 +360,7 @@ Unknown command: cowsay
 
 This makes it incredibly easy to try out packages without permanently installing them. You can even create ad-hoc environments with specific Python modules:
 
-```
+```bash
 ~ ❯ python3 -c "import bcrypt; print(bcrypt.__version__)"
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
@@ -365,7 +375,7 @@ ModuleNotFoundError: No module named 'bcrypt'
 
 Profiles allow you to maintain persistent environments with full rollback capability and atomic updates:
 
-```
+```bash
 # Install btop package in user environment (new generation)
 ~ ❯ nix profile install nixpkgs#btop
 
@@ -396,7 +406,7 @@ Here is a short recording of me playing with nix flakes:
 
 Flakes can produce a variety of outputs: binaries, container images, development environments, and more:
 
-```
+```bash
 ~ ❯ nix flake show github:michalskalski/axact
 github:michalskalski/axact/9ca2f50dc4fb836af6e16dc03190cd2055d9f24b
 ├───devShell
@@ -425,7 +435,7 @@ github:michalskalski/axact/9ca2f50dc4fb836af6e16dc03190cd2055d9f24b
 
 Building a binary from a flake is straightforward:
 
-```
+```bash
 ~ ❯ nix build github:michalskalski/axact#packages.x86_64-linux.bin
 
 # by default it produce 'result' symlink in current directory
@@ -452,7 +462,7 @@ result -> /nix/store/qh4y4iwh0q40q5xxlp61bimhx8i6dp9i-axact-0.1.0
 
 You can also build container images:
 
-```
+```bash
 ~ ❯ nix build github:michalskalski/axact#packages.x86_64-linux.ociImage
 
 ~ ❯ ls -l result
@@ -471,13 +481,13 @@ Loaded image: axact:latest
 
 Flakes can define development environments where all dependencies for your application are available, providing a consistent experience for all developers:
 
-```
+```bash
 ~ ❯ nix develop github:michalskalski/axact
 ```
 
 These development shells are typically defined in the flake.nix file:
 
-```
+```bash
 # flake.nix
 ...
 devShell = mkShell {
@@ -488,7 +498,7 @@ devShell = mkShell {
 
 For an even more seamless experience, you can use [direnv](https://direnv.net/), which many code editors also understand:
 
-```
+```bash
 ~ ❯ ls -a project/
 .envrc  flake.nix ..
 
@@ -509,7 +519,7 @@ direnv: nix-direnv: using cached dev shell
 
 If your project depends on a specific version of a system library or needs extra patches, you can easily modify packages at your project level using [overlays](https://nixos.wiki/wiki/Overlays):
 
-```
+```bash
 example_overlay = final: prev: {
   package = prev.package.overrideAttrs (old: {
     version = "";
@@ -544,7 +554,7 @@ The entire system can be described through [declarative configuration](https://n
 
 Before applying changes to your system, you can test them in a [virtual machine](https://nixos.wiki/wiki/NixOS:nixos-rebuild_build-vm):
 
-```
+```bash
 # will start local vm with current system configuration
 ~ ❯ nixos-rebuild build-vm
 ```
