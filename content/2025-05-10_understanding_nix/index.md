@@ -3,7 +3,7 @@ title = "Understanding Nix: A Purely Functional Approach to Package Management"
 date = 2025-05-10
 +++
 
-_This is a text version of the presentation I made a while ago about Nix and NixOS. The original org file [can be found here](nix.org)._
+_This is a text version of the presentation I made a while ago about Nix and NixOS. The presentation [can be seen here](/pub/nix/index.html)._
 
 Over the past few years, I've been exploring different approaches to managing software environments and deployments. Among them, Nix has stood out as a fascinating solution that takes a fundamentally different approach. In this post, I'll share what I've learned about Nix and why it might be worth your attention.
 
@@ -550,6 +550,8 @@ Before applying changes to your system, you can test them in a [virtual machine]
 ```
 
 Every package installation in the system profile creates a new "generation" and an entry for it in the bootloader. If your system doesn't start after an upgrade, you can simply boot from a previous generation.
+
+![grub generation entries](nixos-boot.png)
 
 If you need to reinstall your system, you can run from a live CD and restore your system from an existing configuration with a single command, or generate a disk image ahead of time.
 
