@@ -9,6 +9,8 @@ compile_sass = true
 build_search_index = false
 generate_feed = true
 generate_feeds = true
+# Author information
+author = "Author Name"
 
 # Theme selection
 theme = "mini"
@@ -25,8 +27,6 @@ highlight_themes_css = [
 
 # Theme-specific configuration
 [extra]
-# Author information
-author = "Author Name"
 
 # Default to dark theme if the user hasn't selected one yet and prefers dark
 default_theme = "auto" # "light", "dark", or "auto"

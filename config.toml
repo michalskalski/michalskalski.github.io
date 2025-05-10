@@ -6,6 +6,8 @@ default_language = "en"
 compile_sass = true
 build_search_index = false
 generate_feeds = true
+# Author information
+author = "Michal Skalski"
 
 # Theme selection
 theme = "mini"
@@ -22,9 +24,6 @@ highlight_themes_css = [
 
 # Theme-specific configuration
 [extra]
-# Author information
-author = "Michal Skalski"
-
 # Default to dark theme if the user hasn't selected one yet and prefers dark
 default_theme = "auto" # "light", "dark", or "auto"
 
