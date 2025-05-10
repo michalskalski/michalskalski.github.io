@@ -1,0 +1,21 @@
+{% if id %}
+<div class="asciinema-player-container">
+    <script
+        src="https://asciinema.org/a/{{ id }}.js"
+        id="asciicast-{{ id }}"
+        async="true"
+        {% if autoplay %}data-autoplay="{{ autoplay }}"{% endif %}
+        {% if preload %}data-preload="{{ preload }}"{% endif %}
+        {% if loop %}data-loop="{{ loop }}"{% endif %}
+        {% if start_at %}data-start-at="{{ start_at }}"{% endif %}
+        {% if speed %}data-speed="{{ speed }}"{% endif %}
+        {% if theme %}data-theme="{{ theme }}"{% endif %}
+        {% if cols %}data-cols="{{ cols }}"{% endif %}
+        {% if rows %}data-rows="{{ rows }}"{% endif %}
+        {% if poster %}data-poster="{{ poster }}"{% endif %}
+        {% if idle_time_limit %}data-idle-time-limit="{{ idle_time_limit }}"{% endif %}
+    ></script>
+</div>
+{% else %}
+<!-- Error: Asciinema ID is required -->
+{% endif %}
